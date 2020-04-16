@@ -4,12 +4,11 @@ abstract class Hero {
     protected String name;
     protected int damage;
     protected int addHeal;
+    protected boolean isAlive;
 
-    public Hero(int health, String name, int damage, int addHeal) {
-        this.health = health;
+    public Hero(String name) {
         this.name = name;
-        this.damage = damage;
-        this.addHeal = addHeal;
+        this.isAlive = true;
     }
 
     abstract void hit(Hero hero);
@@ -17,25 +16,48 @@ abstract class Hero {
     abstract void healing(Hero hero);
 
     void causeDamage(int damage) {
-        if(health < 0) {
-            System.out.println("Герой уже мертвый!");
-        } else {
+        if (isAlive) {
             health -= damage;
         }
+    }
 
+    public static int rnd(int min, int max)
+    {
+        max -= min;
+        return (int) (Math.random() * ++max) + min;
     }
 
     public int getHealth() {
         return health;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getAddHeal() {
+        return addHeal;
+    }
+
     void addHealth(int health) {
         this.health += health;
     }
 
+    boolean canAttack(){
+        return !(this instanceof Doctor) && this.isAlive;
+    }
+
+    boolean canHeal(){
+        return this instanceof Doctor && this.isAlive;
+    }
+
     void info() {
 
-        System.out.println(name + " " + (health < 0 ? "Герой мертвый" : health) + " " + damage);
+        System.out.println(name + ": " + "здоровье " +(isAlive ? health : 0) + ", урон " + damage);
     }
 }
 
